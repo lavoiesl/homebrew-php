@@ -1,6 +1,6 @@
-require 'formula'
+require './Abstract/php5'
 
-class Php53Memcached < Formula
+class Php53Memcached < AbstractPhp5
   homepage 'http://pecl.php.net/package/memcached'
   url 'http://pecl.php.net/get/memcached-2.0.1.tgz'
   md5 'f81a5261be1c9848ed5c071a4ebe5e05'
@@ -20,16 +20,6 @@ class Php53Memcached < Formula
                           "--with-libmemcached-dir=#{Formula.factory('libmemcached').prefix}"
     system "make"
     prefix.install "modules/memcached.so"
-  end
-
-  def caveats; <<-EOS.undent
-    To finish installing php53-memcached:
-      * Add the following line to #{etc}/php.ini:
-        extension="#{prefix}/memcached.so"
-      * Restart your webserver.
-      * Write a PHP page that calls "phpinfo();"
-      * Load it in a browser and look for the info on the memcached module.
-      * If you see it, you have been successful!
-    EOS
+    write_config_file unless ARGV.include? "--without-config-file"
   end
 end

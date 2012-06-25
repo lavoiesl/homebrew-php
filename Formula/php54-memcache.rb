@@ -1,6 +1,6 @@
-require 'formula'
+require './Abstract/php5'
 
-class Php54Memcache < Formula
+class Php54Memcache < AbstractPhp5
   homepage 'http://pecl.php.net/package/memcache'
   url 'http://pecl.php.net/get/memcache-2.2.6.tgz'
   md5 '9542f1886b72ffbcb039a5c21796fe8a'
@@ -18,16 +18,6 @@ class Php54Memcache < Formula
     system "./configure", "--prefix=#{prefix}"
     system "make"
     prefix.install "modules/memcache.so"
-  end
-
-  def caveats; <<-EOS.undent
-    To finish installing php54-memcache:
-      * Add the following line to #{etc}/php.ini:
-        extension="#{prefix}/memcache.so"
-      * Restart your webserver.
-      * Write a PHP page that calls "phpinfo();"
-      * Load it in a browser and look for the info on the memcache module.
-      * If you see it, you have been successful!
-    EOS
+    write_config_file unless ARGV.include? "--without-config-file"
   end
 end

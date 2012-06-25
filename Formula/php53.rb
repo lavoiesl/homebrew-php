@@ -1,4 +1,4 @@
-require 'formula'
+require './Abstract/php5'
 
 def mysql_installed?
   `which mysql_config`.length > 0
@@ -8,7 +8,7 @@ def postgres_installed?
   `which pg_config`.length > 0
 end
 
-class Php53 < Formula
+class Php53 < AbstractPhp5
   homepage 'http://php.net'
   url 'http://www.php.net/get/php-5.3.13.tar.bz2/from/this/mirror'
   md5 '370be99c5cdc2e756c82c44d774933c8'
@@ -74,16 +74,12 @@ class Php53 < Formula
     return p
   end
 
-  def config_path
-    etc+"php/5.3"
-  end
-
   def install
     args = [
       "--prefix=#{prefix}",
       "--disable-debug",
       "--with-config-file-path=#{config_path}",
-      "--with-config-file-scan-dir=#{config_path}/conf.d",
+      "--with-config-file-scan-dir=#{config_scandir_path}",
       "--with-iconv-dir=/usr",
       "--enable-dba",
       "--with-ndbm=/usr",

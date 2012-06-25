@@ -1,6 +1,6 @@
-require 'formula'
+require './Abstract/php5'
 
-class Php54Mongo < Formula
+class Php54Mongo < AbstractPhp5
   homepage 'http://pecl.php.net/package/mongo'
   url 'http://pecl.php.net/get/mongo-1.2.10.tgz'
   md5 'e74fd1b235278a895795f19692923a16'
@@ -18,17 +18,6 @@ class Php54Mongo < Formula
     system "./configure", "--prefix=#{prefix}"
     system "make"
     prefix.install "modules/mongo.so"
-  end
-
-  def caveats; <<-EOS.undent
-    To finish installing php54-mongo:
-      * Add the following lines to #{etc}/php.ini:
-        [mongo]
-        extension="#{prefix}/mongo.so"
-      * Restart your webserver.
-      * Write a PHP page that calls "phpinfo();"
-      * Load it in a browser and look for the info on the mongo module.
-      * If you see it, you have been successful!
-    EOS
+    write_config_file unless ARGV.include? "--without-config-file"
   end
 end

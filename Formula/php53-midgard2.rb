@@ -1,6 +1,6 @@
-require 'formula'
+require './Abstract/php5'
 
-class Php53Midgard2 < Formula
+class Php53Midgard2 < AbstractPhp5
   homepage 'http://www.midgard-project.org'
   head 'https://github.com/midgardproject/midgard-php5.git', :branch => 'ratatoskr'
   url 'https://github.com/midgardproject/midgard-php5/tarball/10.05.6'
@@ -19,16 +19,6 @@ class Php53Midgard2 < Formula
                           "--with-php-config=/usr/bin/php-config"
     system "make"
     prefix.install "modules/midgard2.so"
-  end
-
-  def caveats; <<-EOS.undent
-    To finish installing php53-midgard2:
-      * Add the following line to #{etc}/php.ini:
-        extension="#{prefix}/midgard2.so"
-      * Restart your webserver.
-      * Write a PHP page that calls "phpinfo();"
-      * Load it in a browser and look for the info on the midgard2 module.
-      * If you see it, you have been successful!
-    EOS
+    write_config_file unless ARGV.include? "--without-config-file"
   end
 end

@@ -1,6 +1,6 @@
-require 'formula'
+require './Abstract/php5'
 
-class Php54Mcrypt < Formula
+class Php54Mcrypt < AbstractPhp5
   homepage 'http://php.net/manual/en/book.mcrypt.php'
   url 'http://www.php.net/get/php-5.4.3.tar.bz2/from/this/mirror'
   md5 '51f9488bf8682399b802c48656315cac'
@@ -21,16 +21,6 @@ class Php54Mcrypt < Formula
                           "--with-mcrypt=#{Formula.factory('mcrypt').prefix}"
     system "make"
     prefix.install "modules/mcrypt.so"
-  end
-
-  def caveats; <<-EOS.undent
-    To finish installing php54-mcrypt:
-      * Add the following line to #{etc}/php.ini:
-        extension="#{prefix}/mcrypt.so"
-      * Restart your webserver.
-      * Write a PHP page that calls "phpinfo();"
-      * Load it in a browser and look for the info on the mcrypt module.
-      * If you see it, you have been successful!
-    EOS
+    write_config_file unless ARGV.include? "--without-config-file"
   end
 end
